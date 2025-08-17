@@ -3576,8 +3576,7 @@ async function handleApiRequest(request) {
       return jsonResponse(config);
     } catch (error) {
       console.error('保存Telegram配置失败:', error);
-      return jsonResponse({ error: '保存Telegram配置失败: ' + error.message }
-
+      return jsonResponse({ error: '保存Telegram配置失败: ' + error.message }, 400);
   // 获取Bark配置
   if (path === '/api/bark/config' && request.method === 'GET') {
     try {
@@ -3608,7 +3607,6 @@ async function handleApiRequest(request) {
       return jsonResponse({ error: '测试Bark通知失败: ' + error.message }, 400);
     }
   }
-, 400);
     }
   }
   
