@@ -3644,9 +3644,6 @@ async function handleApiRequest(request) {
       return jsonResponse({ error: '测试Bark通知失败: ' + error.message }, 400);
     }
   }
-, 400);
-    }
-  }
   
   // 测试Telegram通知
   if (path === '/api/telegram/test' && request.method === 'POST') {
