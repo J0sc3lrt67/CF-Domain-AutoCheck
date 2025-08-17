@@ -3577,6 +3577,43 @@ async function handleApiRequest(request) {
     } catch (error) {
       console.error('保存Telegram配置失败:', error);
       return jsonResponse({ error: '保存Telegram配置失败: ' + error.message }, 400);
+    }
+  }
+
+  // 获取Bark配置
+  if (path === '/api/bark/config' && request.method === 'GET') {
+    try {
+      const config = await getBarkConfig();
+      return jsonResponse(config);
+    } catch (error) {
+      console.error('获取Bark配置失败:', error);
+      return jsonResponse({ error: '获取Bark配置失败' }, 500);
+    }
+  }
+
+  // 保存Bark配置
+  if (path === '/api/bark/config' && request.method === 'POST') {
+    try {
+      const configData = await request.json();
+      const config = await saveBarkConfig(configData);
+      return jsonResponse(config);
+    } catch (error) {
+      console.error('保存Bark配置失败:', error);
+      return jsonResponse({ error: '保存Bark配置失败: ' + error.message }, 400);
+    }
+  }
+
+  // 测试Bark通知
+  if (path === '/api/bark/test' && request.method === 'POST') {
+    try {
+      const result = await testBarkNotification();
+      return jsonResponse(result);
+    } catch (error) {
+      console.error('测试Bark通知失败:', error);
+      return jsonResponse({ error: '测试Bark通知失败: ' + error.message }, 400);
+    }
+  }
+
   // 获取Bark配置
   if (path === '/api/bark/config' && request.method === 'GET') {
     try {
@@ -3607,6 +3644,7 @@ async function handleApiRequest(request) {
       return jsonResponse({ error: '测试Bark通知失败: ' + error.message }, 400);
     }
   }
+, 400);
     }
   }
   
@@ -4038,21 +4076,20 @@ async function sendTelegramMessage(config, message) {
 // 获取Bark配置
 async function getBarkConfig() {
   const configStr = await DOMAIN_MONITOR.get('bark_config') || '{}';
-  const config = JSON.parse(configStr);
-  return {
-    enabled: !!config.enabled,
-    token: config.token || '',
-    url: config.url || '',
-  };
+  try {
+    return JSON.parse(configStr);
+  } catch (e) {
+    console.error('解析Bark配置失败:', e);
+    return { enabled: false };
+  }
 }
 
 // 保存Bark配置
 async function saveBarkConfig(configData) {
   const config = {
-    enabled: !!configData.enabled,
-    // 允许空字符串表示清除，从而使用环境变量或默认值
-    token: configData.token !== undefined ? configData.token : '',
-    url: configData.url !== undefined ? configData.url : '',
+    enabled: configData.enabled !== undefined ? configData.enabled : false,
+    token: configData.token || '',
+    url: configData.url || ''
   };
   await DOMAIN_MONITOR.put('bark_config', JSON.stringify(config));
   return await getBarkConfig();
@@ -4061,20 +4098,17 @@ async function saveBarkConfig(configData) {
 // 带token解析的Bark配置
 async function getBarkConfigWithToken() {
   const config = await getBarkConfig();
-  // 如果未填写，尝试环境变量与默认
-  if (!config.token) {
-    if (typeof BARK_TOKEN !== 'undefined') {
-      config.token = BARK_TOKEN;
-    } else if (DEFAULT_BARK_TOKEN !== '') {
-      config.token = DEFAULT_BARK_TOKEN;
-    }
+  // 优先使用环境变量中的Token
+  if (typeof BARK_TOKEN !== 'undefined') {
+    config.token = BARK_TOKEN;
+  } else if (DEFAULT_BARK_TOKEN !== '') {
+    config.token = DEFAULT_BARK_TOKEN;
   }
-  if (!config.url) {
-    if (typeof BARK_URL !== 'undefined') {
-      config.url = BARK_URL;
-    } else if (DEFAULT_BARK_URL !== '') {
-      config.url = DEFAULT_BARK_URL;
-    }
+  // 优先使用环境变量中的URL
+  if (typeof BARK_URL !== 'undefined') {
+    config.url = BARK_URL;
+  } else if (DEFAULT_BARK_URL !== '') {
+    config.url = DEFAULT_BARK_URL;
   }
   return config;
 }
@@ -4484,6 +4518,13 @@ export default {
       if (env.TG_ID) {
         globalThis.TG_ID = env.TG_ID;
       }
+      // 添加Bark环境变量支持
+      if (env.BARK_TOKEN) {
+        globalThis.BARK_TOKEN = env.BARK_TOKEN;
+      }
+      if (env.BARK_URL) {
+        globalThis.BARK_URL = env.BARK_URL;
+      }
     }
     
     // 使用相同的请求处理函数
@@ -4502,6 +4543,13 @@ export default {
       }
       if (env.TG_ID) {
         globalThis.TG_ID = env.TG_ID;
+      }
+      // 添加Bark环境变量支持
+      if (env.BARK_TOKEN) {
+        globalThis.BARK_TOKEN = env.BARK_TOKEN;
+      }
+      if (env.BARK_URL) {
+        globalThis.BARK_URL = env.BARK_URL;
       }
     }
     
