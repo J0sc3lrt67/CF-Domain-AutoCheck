@@ -4561,135 +4561,169 @@ function isKVConfigured() {
 }
 
 // 获取配置向导HTML
-function getSetupHTML() {
-  return `<!DOCTYPE html>
+const getSetupHTML = () => `
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>域名监控系统 - 配置向导</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background-color: #f8f9fa;
-      padding: 20px;
-    }
-    .setup-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .step {
-      margin-bottom: 20px;
-      padding: 15px;
-      border-left: 4px solid #4e54c8;
-      background-color: #f8f9fa;
-    }
-    .step-number {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      background-color: #4e54c8;
-      color: white;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    code {
-      background-color: #f1f1f1;
-      padding: 2px 5px;
-      border-radius: 3px;
-    }
-    img {
-      max-width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin: 10px 0;
-    }
-    .alert {
-      margin-top: 20px;
-    }
-    .btn-primary {
-      background-color: #4e54c8;
-      border-color: #4e54c8;
-    }
-    .btn-primary:hover {
-      background-color: #3f44ae;
-      border-color: #3f44ae;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置向导 - 域名监控系统</title>
+    <link rel="icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
+    <link rel="shortcut icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${ICONFONT_CSS}">
+    <script src="${ICONFONT_JS}"></script>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-image: url('${typeof BACKGROUND_URL !== 'undefined' ? BACKGROUND_URL : DEFAULT_BACKGROUND}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding-top: 20px;
+            position: relative;
+            min-height: 100vh;
+            color: #333;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        .step {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #4e54c8;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        h1 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        ol, ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .btn-primary {
+            background-color: #4e54c8;
+            border-color: #4e54c8;
+        }
+        .btn-primary:hover {
+            background-color: #3f44ae;
+            border-color: #3f44ae;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-  <div class="setup-container">
-    <h1 class="mb-4">域名监控系统 - 配置向导</h1>
-    
-    <div class="alert alert-warning">
-      <strong>提示：</strong> 检测到您尚未完成必要的配置。请按照以下步骤设置您的域名监控系统。
+    <div class="container">
+        <h1><i class="iconfont icon-setting"></i> 配置向导</h1>
+        <p class="text-center text-muted mb-4">请按照以下步骤完成域名监控系统的配置</p>
+        
+        <div class="step">
+            <h3><span class="step-number">1</span> 创建KV命名空间</h3>
+            <p>首先，您需要在Cloudflare中创建一个KV命名空间来存储域名数据：</p>
+            <ol>
+                <li>登录您的Cloudflare账户</li>
+                <li>选择您的账户，然后点击<strong>Workers & Pages</strong></li>
+                <li>在左侧菜单中，点击<strong>KV</strong></li>
+                <li>点击<strong>创建命名空间</strong>按钮</li>
+                <li>输入命名空间名称，例如：<code>domain-monitor</code></li>
+                <li>点击<strong>添加</strong>按钮完成创建</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3><span class="step-number">2</span> 绑定KV命名空间到您的项目</h3>
+            <p>接下来，您需要将创建的KV命名空间绑定到您的Workers或Pages项目：</p>
+            
+            <h4>对于Workers项目：</h4>
+            <ol>
+                <li>在Workers & Pages页面，点击您的Workers项目</li>
+                <li>点击<strong>设置</strong>标签，然后选择<strong>变量</strong></li>
+                <li>在<strong>KV命名空间绑定</strong>部分，点击<strong>添加绑定</strong></li>
+                <li>变量名设置为：<code>DOMAIN_MONITOR</code>（必须使用此名称）</li>
+                <li>KV命名空间选择您刚才创建的命名空间</li>
+                <li>点击<strong>保存</strong>按钮</li>
+            </ol>
+            
+            <h4>对于Pages项目：</h4>
+            <ol>
+                <li>在Workers & Pages页面，点击您的Pages项目</li>
+                <li>点击<strong>设置</strong>标签，然后选择<strong>函数</strong></li>
+                <li>在<strong>KV命名空间绑定</strong>部分，点击<strong>添加绑定</strong></li>
+                <li>变量名设置为：<code>DOMAIN_MONITOR</code>（必须使用此名称）</li>
+                <li>KV命名空间选择您刚才创建的命名空间</li>
+                <li>点击<strong>保存</strong>按钮</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3><span class="step-number">3</span> 设置环境变量（可选）</h3>
+            <p>您可以设置以下环境变量来自定义您的域名监控系统：</p>
+            <ul>
+                <li><code>TOKEN</code> - 登录密码，如果不设置则默认使用"domain"</li>
+                <li><code>SITE_NAME</code> - 网站标题</li>
+                <li><code>LOGO_URL</code> - 自定义Logo图片URL</li>
+                <li><code>BACKGROUND_URL</code> - 自定义背景图片URL</li>
+                <li><code>TG_TOKEN</code> - Telegram机器人Token</li>
+                <li><code>TG_ID</code> - Telegram聊天ID</li>
+                <li><code>BARK_TOKEN</code> - Bark推送Token</li>
+                <li><code>BARK_URL</code> - Bark服务器地址</li>
+            </ul>
+            <p>在Workers或Pages的<strong>设置 > 变量</strong>部分添加这些环境变量。</p>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="/setup-complete" class="btn btn-primary btn-lg">我已完成设置，刷新页面</a>
+        </div>
     </div>
-    
-    <div class="step">
-      <h3><span class="step-number">1</span> 创建KV命名空间</h3>
-      <p>首先，您需要创建一个KV命名空间来存储域名数据：</p>
-      <ol>
-        <li>登录到 <a href="https://dash.cloudflare.com/" target="_blank">Cloudflare仪表板</a></li>
-        <li>选择您的账户，然后点击<strong>Workers & Pages</strong></li>
-        <li>在左侧菜单中，点击<strong>KV</strong></li>
-        <li>点击<strong>创建命名空间</strong>按钮</li>
-        <li>输入命名空间名称，例如：<code>domain-monitor</code></li>
-        <li>点击<strong>添加</strong>按钮完成创建</li>
-      </ol>
-    </div>
-    
-    <div class="step">
-      <h3><span class="step-number">2</span> 绑定KV命名空间到您的项目</h3>
-      <p>接下来，您需要将创建的KV命名空间绑定到您的Workers或Pages项目：</p>
-      
-      <h4>对于Workers项目：</h4>
-      <ol>
-        <li>在Workers & Pages页面，点击您的Workers项目</li>
-        <li>点击<strong>设置</strong>标签，然后选择<strong>变量</strong></li>
-        <li>在<strong>KV命名空间绑定</strong>部分，点击<strong>添加绑定</strong></li>
-        <li>变量名设置为：<code>DOMAIN_MONITOR</code>（必须使用此名称）</li>
-        <li>KV命名空间选择您刚才创建的命名空间</li>
-        <li>点击<strong>保存</strong>按钮</li>
-      </ol>
-      
-      <h4>对于Pages项目：</h4>
-      <ol>
-        <li>在Workers & Pages页面，点击您的Pages项目</li>
-        <li>点击<strong>设置</strong>标签，然后选择<strong>函数</strong></li>
-        <li>在<strong>KV命名空间绑定</strong>部分，点击<strong>添加绑定</strong></li>
-        <li>变量名设置为：<code>DOMAIN_MONITOR</code>（必须使用此名称）</li>
-        <li>KV命名空间选择您刚才创建的命名空间</li>
-        <li>点击<strong>保存</strong>按钮</li>
-      </ol>
-    </div>
-    
-    <div class="step">
-      <h3><span class="step-number">3</span> 设置环境变量（可选）</h3>
-      <p>您可以设置以下环境变量来自定义您的域名监控系统：</p>
-      <ul>
-        <li><code>TOKEN</code> - 登录密码，如果不设置则默认使用"domain"</li>
-        <li><code>SITE_NAME</code> - 网站标题</li>
-        <li><code>LOGO_URL</code> - 自定义Logo图片URL</li>
-        <li><code>BACKGROUND_URL</code> - 自定义背景图片URL</li>
-        <li><code>TG_TOKEN</code> - Telegram机器人Token</li>
-        <li><code>TG_ID</code> - Telegram聊天ID</li>
-        <li><code>BARK_TOKEN</code> - Bark推送Token</li>
-        <li><code>BARK_URL</code> - Bark服务器地址</li>
-      </ul>
-      <p>在Workers或Pages的<strong>设置 > 变量</strong>部分添加这些环境变量。</p>
-    </div>
-    
-    <div class="text-center mt-4">
-      <a href="/setup-complete" class="btn btn-primary btn-lg">我已完成设置，刷新页面</a>
-    </div>
-  </div>
 </body>
 </html>`;
-}
