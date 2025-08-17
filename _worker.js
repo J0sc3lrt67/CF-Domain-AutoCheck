@@ -4680,6 +4680,8 @@ function getSetupHTML() {
         <li><code>BACKGROUND_URL</code> - 自定义背景图片URL</li>
         <li><code>TG_TOKEN</code> - Telegram机器人Token</li>
         <li><code>TG_ID</code> - Telegram聊天ID</li>
+        <li><code>BARK_TOKEN</code> - Bark推送Token</li>
+        <li><code>BARK_URL</code> - Bark服务器地址</li>
       </ul>
       <p>在Workers或Pages的<strong>设置 > 变量</strong>部分添加这些环境变量。</p>
     </div>
@@ -4689,5 +4691,5 @@ function getSetupHTML() {
     </div>
   </div>
 </body>
-</html>
+</html>`;
 }
