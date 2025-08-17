@@ -4608,7 +4608,7 @@ function addCopyrightFooter(html) {
   // 页脚图标颜色（使用CSS颜色值，如：#4e54c8、blue、rgba(0,0,0,0.7)等）
   const footerIconColor = 'white';
   
-  const footerContent = `<span style="color: white;">Copyright © 2025 Netsky</span> | <i class="iconfont icon-github" style="font-size: ${footerIconSize}; color: ${footerIconColor};"></i><a href="https://github.com/cnfug/CF-Domain-Autocheck" target="_blank" style="color: white; text-decoration: none;">GitHub Repository</a> | <i class="iconfont icon-book" style="font-size: ${footerIconSize}; color: ${footerIconColor};"></i><a href="https://nas.yt/" target="_blank" style="color: white; text-decoration: none;">Nas一台Blog</a>`;
+  const footerContent = `<span style="color: white;">Copyright © 2025 Netsky</span> | <i class="iconfont icon-github" style="font-size: ${footerIconSize}; color: ${footerIconColor};"></i><a href="https://github.com/cnfug/CF-Domain-Autocheck" target="_blank" style="color: white; text-decoration: none;">GitHub</a> | <i class="iconfont icon-book" style="font-size: ${footerIconSize}; color: ${footerIconColor};"></i><a href="https://nas.yt/" target="_blank" style="color: white; text-decoration: none;">NAS.YT</a>`;
   
   const bodyEndIndex = html.lastIndexOf('</body>');
   
