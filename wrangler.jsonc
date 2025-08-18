@@ -1,0 +1,6 @@
+{
+  "name": "domain-monitor-worker",
+  "compatibility_date": "2025-08-18",
+  "main": "worker.js",
+  "send_metrics": false
+}
