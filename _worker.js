@@ -193,7 +193,7 @@ const getLoginHTML = (title) => `
     </style>
 </head>
 <body>
-    <a href="https://github.com/kamanfaiz/CF-Domain-Autocheck" target="_blank" class="github-corner" title="GitHub Repository">
+    <a href="https://github.com/cnfug/CF-Domain-Autocheck" target="_blank" class="github-corner" title="GitHub Repository">
         <i class="iconfont icon-github1"></i>
     </a>
     <div class="login-container">
