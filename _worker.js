@@ -35,7 +35,7 @@ const getLoginHTML = (title) => `
     <!-- 添加网站图标(favicon) -->
     <link rel="icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
     <link rel="shortcut icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://api.337.plus/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- 添加阿里巴巴iconfont图标库支持 -->
     <link rel="stylesheet" href="${ICONFONT_CSS}">
     <!-- 确保图标正确加载 -->
@@ -193,7 +193,7 @@ const getLoginHTML = (title) => `
     </style>
 </head>
 <body>
-    <a href="https://github.com/kamanfaiz/CF-Domain-Autocheck" target="_blank" class="github-corner" title="GitHub Repository">
+    <a href="https://github.com/cnfug/CF-Domain-Autocheck" target="_blank" class="github-corner" title="GitHub Repository">
         <i class="iconfont icon-github1"></i>
     </a>
     <div class="login-container">
@@ -255,7 +255,7 @@ const getHTMLContent = (title) => `
     <!-- 添加网站图标(favicon) -->
     <link rel="icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
     <link rel="shortcut icon" href="${typeof LOGO_URL !== 'undefined' ? LOGO_URL : DEFAULT_LOGO}" type="image/png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://api.337.plus/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- 添加阿里巴巴iconfont图标库支持 -->
     <link rel="stylesheet" href="${ICONFONT_CSS}">
     <!-- 确保图标正确加载 -->
@@ -1866,7 +1866,7 @@ const getHTMLContent = (title) => `
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://api.337.plus/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- 已在头部引入iconfont图标库，此处无需重复引入 -->
     <script>
         // 全局变量
@@ -4255,14 +4255,6 @@ async function sendBarkMessage(config, message, title) {
   if (!barkKey) {
     throw new Error('未配置Bark设备Key');
   }
-  
-  // 确保server使用HTTPS协议
-  if (server && !server.startsWith('http://') && !server.startsWith('https://')) {
-    server = 'https://' + server;
-  } else if (server && server.startsWith('http://')) {
-    // 如果是HTTP协议，强制转换为HTTPS
-    server = server.replace('http://', 'https://');
-  }
 
   const url = `${server}/${barkKey}/${encodeURIComponent(title || '域名监控通知')}/${encodeURIComponent(message)}`;
 
@@ -4794,7 +4786,7 @@ function getSetupHTML() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>域名监控系统 - 配置向导</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://api.337.plus/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
